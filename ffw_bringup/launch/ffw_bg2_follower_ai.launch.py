@@ -56,6 +56,11 @@ def generate_launch_description():
             default_value='ffw_bg2_follower',
             description='Type of ros2_control',
         ),
+        DeclareLaunchArgument(
+            'enable_right_hand_control',
+            default_value='false',
+            description='Enable experimental right hand ros2_control on the follower bus.',
+        ),
     ]
 
     start_rviz = LaunchConfiguration('start_rviz')
@@ -69,6 +74,7 @@ def generate_launch_description():
     use_head_eef_tracker = LaunchConfiguration('use_head_eef_tracker')
     init_position_file = LaunchConfiguration('init_position_file')
     ros2_control_type = LaunchConfiguration('ros2_control_type')
+    enable_right_hand_control = LaunchConfiguration('enable_right_hand_control')
 
     robot_description_content = Command([
         PathJoinSubstitution([FindExecutable(name='xacro')]),
@@ -91,6 +97,8 @@ def generate_launch_description():
         'init_position_file:=', init_position_file,
         ' ',
         'ros2_control_type:=', ros2_control_type,
+        ' ',
+        'enable_right_hand_control:=', enable_right_hand_control,
     ])
 
     controller_manager_config = PathJoinSubstitution([
@@ -149,17 +157,26 @@ def generate_launch_description():
             '--controller-ros-args',
             '-r /lift_controller/joint_trajectory:='
             '/leader/joystick_controller_right/joint_trajectory',
-            '--controller-ros-args',
-            '-r /hand_r_controller/joint_trajectory:='
-            '/leader/joint_trajectory_command_broadcaster_right_hand/joint_trajectory',
             'arm_l_controller',
             'arm_r_controller',
             'head_controller',
             'lift_controller',
+        ],
+        parameters=[robot_description],
+    )
+
+    right_hand_controller_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=[
+            '--controller-ros-args',
+            '-r /hand_r_controller/joint_trajectory:='
+            '/leader/joint_trajectory_command_broadcaster_right_hand/joint_trajectory',
             'hand_r_controller',
             'pressure_r_broadcaster',
         ],
         parameters=[robot_description],
+        condition=IfCondition(enable_right_hand_control),
     )
 
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
@@ -210,6 +227,7 @@ def generate_launch_description():
         name='hand_r_joint_trajectory_executor',
         parameters=[trajectory_params_file],
         output='screen',
+        condition=IfCondition(enable_right_hand_control),
     )
 
     init_position_event_handler = RegisterEventHandler(
@@ -256,6 +274,7 @@ def generate_launch_description():
             joint_state_broadcaster_spawner,
             delay_rviz_after_joint_state_broadcaster_spawner,
             robot_controller_spawner,
+            right_hand_controller_spawner,
             init_position_event_handler,
             camera_timer_20s,
             camera_timer_10s,

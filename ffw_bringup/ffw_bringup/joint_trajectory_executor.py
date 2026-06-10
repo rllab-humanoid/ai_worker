@@ -103,7 +103,6 @@ class JointTrajectoryExecutor(Node):
         self.reached_target = False
         self.num_points = 100  # Number of points for smooth trajectory
         self.goal_handle = None
-        self.goal_active = False
         self.last_status_time = 0.0
         self.status_interval = 1.0  # Log status every second
         self.current_step = 0
@@ -133,21 +132,10 @@ class JointTrajectoryExecutor(Node):
         feedback = feedback_msg.feedback
         self.get_logger().debug(f'Feedback: {feedback.actual.positions}')
 
-    def complete_current_step(self):
-        self.get_logger().info(f'🎯 Step {self.current_step} completed!')
-        self.goal_handle = None
-        self.goal_active = False
-        self.current_step += 1
-
-        if self.current_step >= len(self.positions_list):
-            self.get_logger().info('All steps completed!')
-            self.shutdown_node()
-
     def goal_response_callback(self, future):
         goal_handle = future.result()
         if not goal_handle.accepted:
             self.get_logger().info('Goal rejected :(')
-            self.goal_active = False
             return
 
         self.get_logger().info('Goal accepted :)')
@@ -163,11 +151,8 @@ class JointTrajectoryExecutor(Node):
                 f'error_code={result.error_code}, '
                 f'error_string="{result.error_string}"'
             )
-            self.goal_active = False
             self.shutdown_node()
             return
-
-        self.complete_current_step()
 
     def joint_state_callback(self, msg):
         if set(self.joint_names).issubset(set(msg.name)):
@@ -178,38 +163,45 @@ class JointTrajectoryExecutor(Node):
                 msg.velocity[msg.name.index(j)] for j in self.joint_names
             ]
 
-            if self.goal_active:
-                return
+            # Check if current step has reached its target
+            if self.goal_handle is None:
+                if self.current_step < len(self.positions_list):
+                    target_positions = self.get_step_target_positions()
+                    self.get_logger().info(
+                        f'Moving to step {self.current_step} target positions'
+                    )
+
+                    goal_msg = FollowJointTrajectory.Goal()
+                    goal_msg.trajectory = self.create_smooth_trajectory(
+                        self.current_positions, target_positions
+                    )
+
+                    goal_msg.path_tolerance = []
+                    goal_msg.goal_tolerance = []
+                    goal_msg.goal_time_tolerance.sec = 0
+                    goal_msg.goal_time_tolerance.nanosec = 0
+
+                    self.get_logger().info('Sending goal...')
+                    self._send_goal_future = self.action_client.send_goal_async(
+                        goal_msg, feedback_callback=self.feedback_callback
+                    )
+                    self._send_goal_future.add_done_callback(
+                        self.goal_response_callback
+                    )
 
             # Check if current step has reached its target
             if self.check_step_completion():
-                self.complete_current_step()
-                return
+                if not self.reached_target:
+                    self.reached_target = True
+                    self.get_logger().info(f'🎯 Step {self.current_step} completed!')
+                    self.goal_handle = None
+                    self.current_step += 1
+                    self.reached_target = False
 
-            if self.current_step < len(self.positions_list):
-                target_positions = self.get_step_target_positions()
-                self.get_logger().info(
-                    f'Moving to step {self.current_step} target positions'
-                )
-
-                goal_msg = FollowJointTrajectory.Goal()
-                goal_msg.trajectory = self.create_smooth_trajectory(
-                    self.current_positions, target_positions
-                )
-
-                goal_msg.path_tolerance = []
-                goal_msg.goal_tolerance = []
-                goal_msg.goal_time_tolerance.sec = 0
-                goal_msg.goal_time_tolerance.nanosec = 0
-
-                self.get_logger().info('Sending goal...')
-                self.goal_active = True
-                self._send_goal_future = self.action_client.send_goal_async(
-                    goal_msg, feedback_callback=self.feedback_callback
-                )
-                self._send_goal_future.add_done_callback(
-                    self.goal_response_callback
-                )
+                    if self.current_step >= len(self.positions_list):
+                        self.get_logger().info('All steps completed!')
+                        self.shutdown_node()
+                        return
 
     def shutdown_node(self):
         if self.goal_handle:
