@@ -103,6 +103,7 @@ class JointTrajectoryExecutor(Node):
         self.reached_target = False
         self.num_points = 100  # Number of points for smooth trajectory
         self.goal_handle = None
+        self.goal_pending = False
         self.last_status_time = 0.0
         self.status_interval = 1.0  # Log status every second
         self.current_step = 0
@@ -135,10 +136,12 @@ class JointTrajectoryExecutor(Node):
     def goal_response_callback(self, future):
         goal_handle = future.result()
         if not goal_handle.accepted:
+            self.goal_pending = False
             self.get_logger().info('Goal rejected :(')
             return
 
         self.get_logger().info('Goal accepted :)')
+        self.goal_pending = False
         self.goal_handle = goal_handle
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.goal_result_callback)
@@ -146,6 +149,7 @@ class JointTrajectoryExecutor(Node):
     def goal_result_callback(self, future):
         result = future.result().result
         if result.error_code != FollowJointTrajectory.Result.SUCCESSFUL:
+            self.goal_pending = False
             self.get_logger().error(
                 f'Goal failed at step {self.current_step}: '
                 f'error_code={result.error_code}, '
@@ -164,7 +168,7 @@ class JointTrajectoryExecutor(Node):
             ]
 
             # Check if current step has reached its target
-            if self.goal_handle is None:
+            if self.goal_handle is None and not self.goal_pending:
                 if self.current_step < len(self.positions_list):
                     target_positions = self.get_step_target_positions()
                     self.get_logger().info(
@@ -182,18 +186,21 @@ class JointTrajectoryExecutor(Node):
                     goal_msg.goal_time_tolerance.nanosec = 0
 
                     self.get_logger().info('Sending goal...')
+                    self.goal_pending = True
                     self._send_goal_future = self.action_client.send_goal_async(
                         goal_msg, feedback_callback=self.feedback_callback
                     )
                     self._send_goal_future.add_done_callback(
                         self.goal_response_callback
                     )
+                    return
 
             # Check if current step has reached its target
             if self.check_step_completion():
                 if not self.reached_target:
                     self.reached_target = True
                     self.get_logger().info(f'🎯 Step {self.current_step} completed!')
+                    self.goal_pending = False
                     self.goal_handle = None
                     self.current_step += 1
                     self.reached_target = False

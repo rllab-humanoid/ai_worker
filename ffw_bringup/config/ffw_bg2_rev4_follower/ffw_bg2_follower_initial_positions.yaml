@@ -9,13 +9,12 @@
         - arm_l_joint5
         - arm_l_joint6
         - arm_l_joint7
-      #step_names: [home, test1, test2]
-      step_names: [home, test1, test2, test3, test5]
+      step_names: [home, raise_half, raise_full, rotate_to_ready, ready]
       home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test1: [0.0, 0.75, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test2: [0.0, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test3: [-1.5, 1.2, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test5: [-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      raise_half: [0.0, 0.75, 0.0, 0.0, 0.0, 0.0, 0.0]
+      raise_full: [0.0, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0]
+      rotate_to_ready: [-1.5, 1.2, 0.0, 0.0, 0.0, 0.0, 0.0]
+      ready: [-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
       duration: 5.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
@@ -33,13 +32,12 @@
         - arm_r_joint5
         - arm_r_joint6
         - arm_r_joint7
-      #step_names: [home, test1, test2]
-      step_names: [home, test1, test2, test3, test5]
+      step_names: [home, raise_half, raise_full, rotate_to_ready, ready]
       home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test1: [0.0, -0.75, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test2: [0.0, -1.4, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test3: [-1.5, -1.2, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test5: [-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      raise_half: [0.0, -0.75, 0.0, 0.0, 0.0, 0.0, 0.0]
+      raise_full: [0.0, -1.4, 0.0, 0.0, 0.0, 0.0, 0.0]
+      rotate_to_ready: [-1.5, -1.2, 0.0, 0.0, 0.0, 0.0, 0.0]
+      ready: [-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
       duration: 5.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
@@ -67,7 +65,6 @@
         - lift_joint
       step_names: [home]
       home: [-0.075]
-      # home: [-0.15]
       duration: 10.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
