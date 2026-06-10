@@ -17,7 +17,7 @@
 # Authors: Sungho Woo, Woojin Wie, Wonho Yun
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, RegisterEventHandler
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
@@ -173,9 +173,36 @@ def generate_launch_description():
             '-r /hand_r_controller/joint_trajectory:='
             '/leader/joint_trajectory_command_broadcaster_right_hand/joint_trajectory',
             'hand_r_controller',
+            'effort_r_controller',
             'pressure_r_broadcaster',
         ],
         parameters=[robot_description],
+        condition=IfCondition(enable_right_hand_control),
+    )
+
+    right_hand_current_command_process = ExecuteProcess(
+        name='right_hand_current_command_process',
+        cmd=[
+            'ros2', 'topic', 'pub',
+            '-r', '50',
+            '-t', '50',
+            '-p', '50',
+            '/effort_r_controller/commands',
+            'std_msgs/msg/Float64MultiArray',
+            'data: [300.0, 300.0, 300.0, 300.0,'
+                    '300.0, 300.0, 300.0, 300.0,'
+                    '300.0, 300.0, 300.0, 300.0,'
+                    '300.0, 300.0, 300.0, 300.0,'
+                    '300.0, 300.0, 300.0, 300.0]',
+        ],
+        condition=IfCondition(enable_right_hand_control),
+    )
+
+    delay_right_hand_current_command_process_after_controllers = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=right_hand_controller_spawner,
+            on_exit=[right_hand_current_command_process],
+        ),
         condition=IfCondition(enable_right_hand_control),
     )
 
@@ -275,6 +302,7 @@ def generate_launch_description():
             delay_rviz_after_joint_state_broadcaster_spawner,
             robot_controller_spawner,
             right_hand_controller_spawner,
+            delay_right_hand_current_command_process_after_controllers,
             init_position_event_handler,
             camera_timer_20s,
             camera_timer_10s,
