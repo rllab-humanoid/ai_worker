@@ -10,8 +10,8 @@
         - arm_l_joint6
         - arm_l_joint7
         - gripper_l_joint1
-      step_names: [step0]
-      step0: [0.0, 0.0, -1.57, 0.0, 0.0, 0.0, 0.0, 0.0]
+      step_names: [home]
+      home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
       duration: 5.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
@@ -30,8 +30,8 @@
         - arm_r_joint6
         - arm_r_joint7
         - gripper_r_joint1
-      step_names: [step0]
-      step0: [0.0, 0.0, 1.57, 0.0, 0.0, 0.0, 0.0, 0.0]
+      step_names: [home]
+      home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
       duration: 5.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
@@ -44,8 +44,8 @@
       joint_names:
         - head_joint1
         - head_joint2
-      step_names: [step0]
-      step0: [0.0, 0.0]
+      step_names: [home]
+      home: [0.0, 0.0]
       duration: 5.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
@@ -57,11 +57,10 @@
     ros__parameters:
       joint_names:
         - lift_joint
-      step_names: [step0]
-      step0: [-0.145]
+      step_names: [home]
+      home: [0.0]
       duration: 10.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
       action_topic: '/lift_controller/follow_joint_trajectory'
       joint_states_topic: '/joint_states'
-

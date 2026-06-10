@@ -19,8 +19,8 @@
             <param name="port_name">/dev/follower</param>
             <param name="baud_rate">4000000</param>
             <param name="dynamixel_model_folder">/param/dxl_model</param>
-            <param name="number_of_joints">17</param>
-            <param name="number_of_transmissions">17</param>
+            <param name="number_of_joints">19</param>
+            <param name="number_of_transmissions">19</param>
             <param name="disable_torque_at_init">true</param>
             <param name="dynamixel_state_pub_msg_name">dynamixel_hardware_interface/dxl_state</param>
             <param name="get_dynamixel_data_srv_name">dynamixel_hardware_interface/get_dxl_data</param>
@@ -72,6 +72,12 @@
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
       </joint>
+      <joint name="gripper_r_joint1">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
       <joint name="arm_l_joint1">
         <command_interface name="position"/>
         <state_interface name="position"/>
@@ -109,6 +115,12 @@
         <state_interface name="effort"/>
       </joint>
       <joint name="arm_l_joint7">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="gripper_l_joint1">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
@@ -297,6 +309,19 @@
         <param name="Max Position Limit">131875</param>
         <param name="Min Position Limit">-151875</param>
       </gpio>
+      <gpio name="dxl8">
+        <param name="type">dxl</param>
+        <param name="ID">8</param>
+        <command_interface name="Goal Position"/>
+        <state_interface name="Present Position"/>
+        <state_interface name="Present Velocity"/>
+        <state_interface name="Present Current"/>
+        <state_interface name="Hardware Error Status"/>
+        <param name="Operating Mode">5</param>
+        <param name="Return Delay Time">0</param>
+        <param name="Profile Velocity">0</param>
+        <param name="Profile Acceleration">0</param>
+      </gpio>
       <!-- LEFT ARM -->
       <gpio name="dxl31">
         <param name="type">dxl</param>
@@ -460,6 +485,19 @@
         <param name="Profile Acceleration">50</param>
         <param name="Max Position Limit">131875</param>
         <param name="Min Position Limit">-151875</param>
+      </gpio>
+      <gpio name="dxl38">
+        <param name="type">dxl</param>
+        <param name="ID">38</param>
+        <command_interface name="Goal Position"/>
+        <state_interface name="Present Position"/>
+        <state_interface name="Present Velocity"/>
+        <state_interface name="Present Current"/>
+        <state_interface name="Hardware Error Status"/>
+        <param name="Operating Mode">5</param>
+        <param name="Return Delay Time">0</param>
+        <param name="Profile Velocity">0</param>
+        <param name="Profile Acceleration">0</param>
       </gpio>
       <!-- LIFT -->
       <gpio name="dxl81">

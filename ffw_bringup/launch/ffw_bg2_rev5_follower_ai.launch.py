@@ -17,7 +17,7 @@
 # Authors: Sungho Woo, Woojin Wie, Wonho Yun
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, RegisterEventHandler
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
@@ -43,7 +43,7 @@ def generate_launch_description():
                               description='Whether to launch cameras.'),
         DeclareLaunchArgument('init_position', default_value='true',
                               description='Whether to launch the init_position node.'),
-        DeclareLaunchArgument('model', default_value='ffw_bg2_rev4_follower',
+        DeclareLaunchArgument('model', default_value='ffw_bg2_rev5_follower',
                               description='Robot model name.'),
         DeclareLaunchArgument('use_head_eef_tracker', default_value='false',
                               description='Whether to launch the head EEF tracker node.'),
@@ -144,6 +144,9 @@ def generate_launch_description():
             '-r /arm_r_controller/joint_trajectory:='
             '/leader/joint_trajectory_command_broadcaster_right/joint_trajectory',
             '--controller-ros-args',
+            '-r /hand_r_controller/joint_trajectory:='
+            '/leader/joint_trajectory_command_broadcaster_right_hand/joint_trajectory',
+            '--controller-ros-args',
             '-r /head_controller/joint_trajectory:='
             '/leader/joystick_controller_left/joint_trajectory',
             '--controller-ros-args',
@@ -153,6 +156,8 @@ def generate_launch_description():
             'arm_r_controller',
             'head_controller',
             'lift_controller',
+            'hand_r_controller',
+            'effort_r_controller',
         ],
         parameters=[robot_description],
     )
@@ -161,6 +166,30 @@ def generate_launch_description():
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
             on_exit=[rviz_node]
+        )
+    )
+
+    right_current_command_process = ExecuteProcess(
+        name='current_command_process',
+        cmd=[
+            'ros2', 'topic', 'pub',
+            '-r', '50',
+            '-t', '50',
+            '-p', '50',
+            '/effort_r_controller/commands',
+            'std_msgs/msg/Float64MultiArray',
+            'data: [300.0, 300.0, 300.0, 300.0,'
+                    '300.0, 300.0, 300.0, 300.0,'
+                    '300.0, 300.0, 300.0, 300.0,'
+                    '300.0, 300.0, 300.0, 300.0,'
+                    '300.0, 300.0, 300.0, 300.0]',
+        ],
+    )
+
+    delay_right_hand_current_command_process_after_controllers = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=robot_controller_spawner,
+            on_exit=[right_current_command_process],
         )
     )
 
@@ -199,6 +228,13 @@ def generate_launch_description():
         parameters=[trajectory_params_file],
         output='screen',
     )
+    joint_trajectory_executor_right_hand = Node(
+        package='ffw_bringup',
+        executable='joint_trajectory_executor',
+        name='hand_r_joint_trajectory_executor',
+        parameters=[trajectory_params_file],
+        output='screen',
+    )
 
     init_position_event_handler = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -207,7 +243,8 @@ def generate_launch_description():
                 joint_trajectory_executor_left,
                 joint_trajectory_executor_right,
                 joint_trajectory_executor_head,
-                joint_trajectory_executor_lift
+                joint_trajectory_executor_lift,
+                joint_trajectory_executor_right_hand
             ]
         ),
         condition=IfCondition(init_position)
@@ -244,6 +281,7 @@ def generate_launch_description():
             delay_rviz_after_joint_state_broadcaster_spawner,
             robot_controller_spawner,
             init_position_event_handler,
+            delay_right_hand_current_command_process_after_controllers,
             camera_timer_20s,
             camera_timer_10s,
             head_eef_tracker_node,

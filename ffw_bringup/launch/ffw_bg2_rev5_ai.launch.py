@@ -27,24 +27,17 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 def generate_launch_description():
     bringup_launch_dir = os.path.join(get_package_share_directory('ffw_bringup'), 'launch')
 
-    camera_zed = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(bringup_launch_dir, 'camera_zed.launch.py')),
-        launch_arguments={'camera_model': 'zedm'}.items()
+    follower = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(bringup_launch_dir,
+                                                   'ffw_bg2_rev5_follower_ai.launch.py')),
+        launch_arguments={'launch_cameras': 'true', 'init_position': 'true'}.items()
     )
-    camera_realsense = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(bringup_launch_dir, 'camera_realsense.launch.py')),
-        launch_arguments={
-            'align_depth.enable1': 'true',
-            'align_depth.enable2': 'true',
-            'colorizer.enable1': 'false',
-            'colorizer.enable2': 'false',
-            'enable_sync1': 'true',
-            'enable_sync2': 'true',
-        }.items()
+    leader = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(bringup_launch_dir,
+                                                   'ffw_lg2_leader_ai.launch.py'))
     )
 
     return LaunchDescription([
-        camera_zed,
-        TimerAction(period=10.0, actions=[camera_realsense]),
+        follower,
+        TimerAction(period=30.0, actions=[leader]),
     ])

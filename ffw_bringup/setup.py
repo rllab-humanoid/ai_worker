@@ -14,7 +14,7 @@ author_emails = ', '.join(email for _, email in authors_info)
 
 setup(
     name=package_name,
-    version='1.1.18',
+    version='1.3.1',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -27,10 +27,16 @@ setup(
          glob('config/ffw_bg2_rev3_follower/*')),
         (os.path.join('share', package_name, 'config/ffw_bg2_rev4_follower'),
          glob('config/ffw_bg2_rev4_follower/*')),
+        (os.path.join('share', package_name, 'config/ffw_bg2_rev5_follower'),
+         glob('config/ffw_bg2_rev5_follower/*')),
+        (os.path.join('share', package_name, 'config/ffw_bh5_rev1_follower'),
+         glob('config/ffw_bh5_rev1_follower/*')),
         (os.path.join('share', package_name, 'config/ffw_sg2_rev1_follower'),
          glob('config/ffw_sg2_rev1_follower/*')),
         (os.path.join('share', package_name, 'config/ffw_lg2_leader'),
          glob('config/ffw_lg2_leader/*')),
+        (os.path.join('share', package_name, 'config/ffw_sh5_rev1_follower'),
+         glob('config/ffw_sh5_rev1_follower/*')),
         (os.path.join('share', package_name, 'config/common'), glob('config/common/*')),
         ('share/' + package_name + '/worlds', glob('worlds/*.sdf')),
     ],
@@ -43,13 +49,11 @@ setup(
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
         'Topic :: Software Development',
     ],
     description='ROS 2 launch scripts for starting the FFW',
-    license='Apache 2.0',
-    tests_require=['pytest'],
+    license='Apache-2.0',
     entry_points={
         'console_scripts': [
             'joint_trajectory_executor = ffw_bringup.joint_trajectory_executor:main',

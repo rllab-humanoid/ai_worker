@@ -9,13 +9,13 @@
         - arm_l_joint5
         - arm_l_joint6
         - arm_l_joint7
-      #step_names: [home, test1, test2]
+        - gripper_l_joint1
       step_names: [home, test1, test2, test3, test5]
-      home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test1: [0.0, 0.75, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test2: [0.0, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test3: [-1.5, 1.2, 0.0, 0.0, 0.0, 0.0, 0.0]
-      test5: [-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      test1: [0.0, 0.75, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      test2: [0.0, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      test3: [-1.5, 1.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      test5: [-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
       duration: 5.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
@@ -33,7 +33,6 @@
         - arm_r_joint5
         - arm_r_joint6
         - arm_r_joint7
-      #step_names: [home, test1, test2]
       step_names: [home, test1, test2, test3, test5]
       home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
       test1: [0.0, -0.75, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -53,7 +52,7 @@
         - head_joint1
         - head_joint2
       step_names: [home]
-      home: [0.44, 0.0981]
+      home: [0.0, 0.0]
       duration: 5.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
@@ -66,10 +65,44 @@
       joint_names:
         - lift_joint
       step_names: [home]
-      home: [-0.075]
-      # home: [-0.15]
+      home: [0.0]
       duration: 10.0
       position_tolerance: 0.1
       velocity_tolerance: 0.01
       action_topic: '/lift_controller/follow_joint_trajectory'
+      joint_states_topic: '/joint_states'
+
+/**:
+  hand_r_joint_trajectory_executor:
+    ros__parameters:
+      joint_names:
+        - finger_r_joint1
+        - finger_r_joint2
+        - finger_r_joint3
+        - finger_r_joint4
+        - finger_r_joint5
+        - finger_r_joint6
+        - finger_r_joint7
+        - finger_r_joint8
+        - finger_r_joint9
+        - finger_r_joint10
+        - finger_r_joint11
+        - finger_r_joint12
+        - finger_r_joint13
+        - finger_r_joint14
+        - finger_r_joint15
+        - finger_r_joint16
+        - finger_r_joint17
+        - finger_r_joint18
+        - finger_r_joint19
+        - finger_r_joint20
+      step_names: [step1]
+      step1: [0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0]
+      duration: 5.0
+      epsilon: 0.2
+      action_topic: '/hand_r_controller/follow_joint_trajectory'
       joint_states_topic: '/joint_states'

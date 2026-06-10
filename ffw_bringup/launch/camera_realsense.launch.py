@@ -76,9 +76,9 @@ local_parameters = [{'name': 'camera_name1', 'default': 'camera_left',
                      'description': 'Depth module color stream profile for d405 camera1'},
                     {'name': 'depth_module.color_profile2', 'default': '424,240,30',
                      'description': 'Depth module color stream profile for d405 camera2'},
-                    {'name': 'colorizer.enable1', 'default': 'true',
+                    {'name': 'colorizer.enable1', 'default': 'false',
                      'description': 'enable colorizer filter for camera1'},
-                    {'name': 'colorizer.enable2', 'default': 'true',
+                    {'name': 'colorizer.enable2', 'default': 'false',
                      'description': 'enable colorizer filter for camera2'},
                     ]
 
