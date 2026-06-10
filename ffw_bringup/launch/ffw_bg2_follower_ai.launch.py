@@ -58,8 +58,8 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'enable_right_hand_control',
-            default_value='false',
-            description='Enable experimental right hand ros2_control on the follower bus.',
+            default_value='true',
+            description='Enable right hand ros2_control on the follower bus.',
         ),
     ]
 
