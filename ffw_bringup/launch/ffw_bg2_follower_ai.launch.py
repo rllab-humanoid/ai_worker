@@ -204,6 +204,13 @@ def generate_launch_description():
         parameters=[trajectory_params_file],
         output='screen',
     )
+    joint_trajectory_executor_right_hand = Node(
+        package='ffw_bringup',
+        executable='joint_trajectory_executor',
+        name='hand_r_joint_trajectory_executor',
+        parameters=[trajectory_params_file],
+        output='screen',
+    )
 
     init_position_event_handler = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -212,7 +219,8 @@ def generate_launch_description():
                 joint_trajectory_executor_left,
                 joint_trajectory_executor_right,
                 joint_trajectory_executor_head,
-                joint_trajectory_executor_lift
+                joint_trajectory_executor_lift,
+                joint_trajectory_executor_right_hand
             ]
         ),
         condition=IfCondition(init_position)
