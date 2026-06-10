@@ -1,5 +1,307 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="ffw_bg2_right_hand_joint" params="name">
+    <joint name="${name}">
+      <command_interface name="position"/>
+      <command_interface name="effort"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="ffw_bg2_right_hand_sensor" params="name">
+    <sensor name="${name}">
+      <state_interface name="Present Pressure 1"/>
+      <state_interface name="Present Pressure 2"/>
+      <state_interface name="Present Pressure 3"/>
+      <state_interface name="Present Pressure 4"/>
+      <state_interface name="Present Pressure 5"/>
+      <state_interface name="Present Pressure 6"/>
+      <state_interface name="Present Pressure 7"/>
+      <state_interface name="Present Pressure 8"/>
+      <state_interface name="Present Pressure 9"/>
+    </sensor>
+  </xacro:macro>
+
+  <xacro:macro name="ffw_bg2_right_hand_interfaces">
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint1"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint2"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint3"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint4"/>
+    <xacro:ffw_bg2_right_hand_sensor name="finger_r_sensor1"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint5"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint6"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint7"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint8"/>
+    <xacro:ffw_bg2_right_hand_sensor name="finger_r_sensor2"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint9"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint10"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint11"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint12"/>
+    <xacro:ffw_bg2_right_hand_sensor name="finger_r_sensor3"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint13"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint14"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint15"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint16"/>
+    <xacro:ffw_bg2_right_hand_sensor name="finger_r_sensor4"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint17"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint18"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint19"/>
+    <xacro:ffw_bg2_right_hand_joint name="finger_r_joint20"/>
+    <xacro:ffw_bg2_right_hand_sensor name="finger_r_sensor5"/>
+  </xacro:macro>
+
+  <xacro:macro name="ffw_bg2_right_hand_controller">
+    <gpio name="hand_r_controller">
+      <param name="type">controller</param>
+      <param name="ID">110</param>
+      <param name="Reboot">1</param>
+      <param name="Table Sync Enable">0</param>
+      <param name="Bus Watchdog">100</param>
+      <param name="SyncTable 1 ID 1">111</param>
+      <param name="SyncTable 1 ID 2">112</param>
+      <param name="SyncTable 1 ID 3">113</param>
+      <param name="SyncTable 1 ID 4">114</param>
+      <param name="SyncTable 1 ID 5">115</param>
+      <param name="SyncTable 2 ID 1">116</param>
+      <param name="SyncTable 2 ID 2">117</param>
+      <param name="SyncTable 2 ID 3">118</param>
+      <param name="SyncTable 2 ID 4">119</param>
+      <param name="SyncTable 2 ID 5">120</param>
+      <param name="SyncTable 3 ID 1">121</param>
+      <param name="SyncTable 3 ID 2">122</param>
+      <param name="SyncTable 3 ID 3">123</param>
+      <param name="SyncTable 3 ID 4">124</param>
+      <param name="SyncTable 3 ID 5">125</param>
+      <param name="SyncTable 4 ID 1">126</param>
+      <param name="SyncTable 4 ID 2">127</param>
+      <param name="SyncTable 4 ID 3">128</param>
+      <param name="SyncTable 4 ID 4">129</param>
+      <param name="SyncTable 4 ID 5">130</param>
+      <param name="SyncTable 5 ID 1">131</param>
+      <param name="SyncTable 5 ID 2">132</param>
+      <param name="SyncTable 5 ID 3">133</param>
+      <param name="SyncTable 5 ID 4">134</param>
+      <param name="SyncTable 5 ID 5">135</param>
+      <param name="SyncTable 1 Read Address 1">224</param>
+      <param name="SyncTable 1 Read Address 2">224</param>
+      <param name="SyncTable 1 Read Address 3">224</param>
+      <param name="SyncTable 1 Read Address 4">224</param>
+      <param name="SyncTable 1 Read Address 5">72</param>
+      <param name="SyncTable 1 Read Size 1">6</param>
+      <param name="SyncTable 1 Read Size 2">6</param>
+      <param name="SyncTable 1 Read Size 3">6</param>
+      <param name="SyncTable 1 Read Size 4">6</param>
+      <param name="SyncTable 1 Read Size 5">9</param>
+      <param name="SyncTable 1 Write Address 1">230</param>
+      <param name="SyncTable 1 Write Address 2">230</param>
+      <param name="SyncTable 1 Write Address 3">230</param>
+      <param name="SyncTable 1 Write Address 4">230</param>
+      <param name="SyncTable 1 Write Address 5">0</param>
+      <param name="SyncTable 1 Write Size 1">4</param>
+      <param name="SyncTable 1 Write Size 2">4</param>
+      <param name="SyncTable 1 Write Size 3">4</param>
+      <param name="SyncTable 1 Write Size 4">4</param>
+      <param name="SyncTable 1 Write Size 5">0</param>
+      <param name="SyncTable 2 Read Address 1">224</param>
+      <param name="SyncTable 2 Read Address 2">224</param>
+      <param name="SyncTable 2 Read Address 3">224</param>
+      <param name="SyncTable 2 Read Address 4">224</param>
+      <param name="SyncTable 2 Read Address 5">72</param>
+      <param name="SyncTable 2 Read Size 1">6</param>
+      <param name="SyncTable 2 Read Size 2">6</param>
+      <param name="SyncTable 2 Read Size 3">6</param>
+      <param name="SyncTable 2 Read Size 4">6</param>
+      <param name="SyncTable 2 Read Size 5">9</param>
+      <param name="SyncTable 2 Write Address 1">230</param>
+      <param name="SyncTable 2 Write Address 2">230</param>
+      <param name="SyncTable 2 Write Address 3">230</param>
+      <param name="SyncTable 2 Write Address 4">230</param>
+      <param name="SyncTable 2 Write Address 5">0</param>
+      <param name="SyncTable 2 Write Size 1">4</param>
+      <param name="SyncTable 2 Write Size 2">4</param>
+      <param name="SyncTable 2 Write Size 3">4</param>
+      <param name="SyncTable 2 Write Size 4">4</param>
+      <param name="SyncTable 2 Write Size 5">0</param>
+      <param name="SyncTable 3 Read Address 1">224</param>
+      <param name="SyncTable 3 Read Address 2">224</param>
+      <param name="SyncTable 3 Read Address 3">224</param>
+      <param name="SyncTable 3 Read Address 4">224</param>
+      <param name="SyncTable 3 Read Address 5">72</param>
+      <param name="SyncTable 3 Read Size 1">6</param>
+      <param name="SyncTable 3 Read Size 2">6</param>
+      <param name="SyncTable 3 Read Size 3">6</param>
+      <param name="SyncTable 3 Read Size 4">6</param>
+      <param name="SyncTable 3 Read Size 5">9</param>
+      <param name="SyncTable 3 Write Address 1">230</param>
+      <param name="SyncTable 3 Write Address 2">230</param>
+      <param name="SyncTable 3 Write Address 3">230</param>
+      <param name="SyncTable 3 Write Address 4">230</param>
+      <param name="SyncTable 3 Write Address 5">0</param>
+      <param name="SyncTable 3 Write Size 1">4</param>
+      <param name="SyncTable 3 Write Size 2">4</param>
+      <param name="SyncTable 3 Write Size 3">4</param>
+      <param name="SyncTable 3 Write Size 4">4</param>
+      <param name="SyncTable 3 Write Size 5">0</param>
+      <param name="SyncTable 4 Read Address 1">224</param>
+      <param name="SyncTable 4 Read Address 2">224</param>
+      <param name="SyncTable 4 Read Address 3">224</param>
+      <param name="SyncTable 4 Read Address 4">224</param>
+      <param name="SyncTable 4 Read Address 5">72</param>
+      <param name="SyncTable 4 Read Size 1">6</param>
+      <param name="SyncTable 4 Read Size 2">6</param>
+      <param name="SyncTable 4 Read Size 3">6</param>
+      <param name="SyncTable 4 Read Size 4">6</param>
+      <param name="SyncTable 4 Read Size 5">9</param>
+      <param name="SyncTable 4 Write Address 1">230</param>
+      <param name="SyncTable 4 Write Address 2">230</param>
+      <param name="SyncTable 4 Write Address 3">230</param>
+      <param name="SyncTable 4 Write Address 4">230</param>
+      <param name="SyncTable 4 Write Address 5">0</param>
+      <param name="SyncTable 4 Write Size 1">4</param>
+      <param name="SyncTable 4 Write Size 2">4</param>
+      <param name="SyncTable 4 Write Size 3">4</param>
+      <param name="SyncTable 4 Write Size 4">4</param>
+      <param name="SyncTable 4 Write Size 5">0</param>
+      <param name="SyncTable 5 Read Address 1">224</param>
+      <param name="SyncTable 5 Read Address 2">224</param>
+      <param name="SyncTable 5 Read Address 3">224</param>
+      <param name="SyncTable 5 Read Address 4">224</param>
+      <param name="SyncTable 5 Read Address 5">72</param>
+      <param name="SyncTable 5 Read Size 1">6</param>
+      <param name="SyncTable 5 Read Size 2">6</param>
+      <param name="SyncTable 5 Read Size 3">6</param>
+      <param name="SyncTable 5 Read Size 4">6</param>
+      <param name="SyncTable 5 Read Size 5">9</param>
+      <param name="SyncTable 5 Write Address 1">230</param>
+      <param name="SyncTable 5 Write Address 2">230</param>
+      <param name="SyncTable 5 Write Address 3">230</param>
+      <param name="SyncTable 5 Write Address 4">230</param>
+      <param name="SyncTable 5 Write Address 5">0</param>
+      <param name="SyncTable 5 Write Size 1">4</param>
+      <param name="SyncTable 5 Write Size 2">4</param>
+      <param name="SyncTable 5 Write Size 3">4</param>
+      <param name="SyncTable 5 Write Size 4">4</param>
+      <param name="SyncTable 5 Write Size 5">0</param>
+    </gpio>
+  </xacro:macro>
+
+  <xacro:macro name="ffw_bg2_right_hand_init_dxl" params="id drive_mode homing_offset">
+    <gpio name="dxl${id}_init">
+      <param name="type">controller</param>
+      <param name="ID">${id}</param>
+      <param name="Reboot">1</param>
+      <param name="Startup Configuration">2</param>
+      <param name="Operating Mode">5</param>
+      <param name="Drive Mode">${drive_mode}</param>
+      <param name="Bus Watchdog">100</param>
+      <param name="Profile Velocity">100</param>
+      <param name="Profile Acceleration">50</param>
+      <param name="Position P Gain">500</param>
+      <param name="Position D Gain">1000</param>
+      <param name="Homing Offset">${homing_offset}</param>
+      <param name="Indirect Address 1">126</param>
+      <param name="Indirect Address 2">127</param>
+      <param name="Indirect Address 3">128</param>
+      <param name="Indirect Address 4">129</param>
+      <param name="Indirect Address 5">132</param>
+      <param name="Indirect Address 6">133</param>
+      <param name="Indirect Address 7">102</param>
+      <param name="Indirect Address 8">103</param>
+      <param name="Indirect Address 9">116</param>
+      <param name="Indirect Address 10">117</param>
+    </gpio>
+  </xacro:macro>
+
+  <xacro:macro name="ffw_bg2_right_hand_virtual_dxl" params="id model_num">
+    <gpio name="dxl${id}">
+      <command_interface name="Goal Position"/>
+      <command_interface name="Goal Current"/>
+      <state_interface name="Present Position"/>
+      <state_interface name="Present Velocity"/>
+      <state_interface name="Present Current"/>
+      <param name="type">virtual_dxl</param>
+      <param name="ID">${id}</param>
+      <param name="comm_id">110</param>
+      <param name="model_num">${model_num}</param>
+    </gpio>
+  </xacro:macro>
+
+  <xacro:macro name="ffw_bg2_right_hand_virtual_sensor" params="name id model_num">
+    <gpio name="${name}">
+      <state_interface name="Present Pressure 1"/>
+      <state_interface name="Present Pressure 2"/>
+      <state_interface name="Present Pressure 3"/>
+      <state_interface name="Present Pressure 4"/>
+      <state_interface name="Present Pressure 5"/>
+      <state_interface name="Present Pressure 6"/>
+      <state_interface name="Present Pressure 7"/>
+      <state_interface name="Present Pressure 8"/>
+      <state_interface name="Present Pressure 9"/>
+      <param name="type">virtual_sensor</param>
+      <param name="ID">${id}</param>
+      <param name="comm_id">110</param>
+      <param name="model_num">${model_num}</param>
+    </gpio>
+  </xacro:macro>
+
+  <xacro:macro name="ffw_bg2_right_hand_hardware">
+    <xacro:ffw_bg2_right_hand_controller/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="111" drive_mode="13" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="112" drive_mode="12" homing_offset="-1024"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="113" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="114" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="116" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="117" drive_mode="12" homing_offset="1024"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="118" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="119" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="121" drive_mode="12" homing_offset="171"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="122" drive_mode="12" homing_offset="1024"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="123" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="124" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="126" drive_mode="12" homing_offset="341"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="127" drive_mode="12" homing_offset="1024"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="128" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="129" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="131" drive_mode="12" homing_offset="682"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="132" drive_mode="12" homing_offset="1024"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="133" drive_mode="12" homing_offset="0"/>
+    <xacro:ffw_bg2_right_hand_init_dxl id="134" drive_mode="12" homing_offset="0"/>
+
+    <gpio name="hand_r_controller_dummy">
+      <param name="type">controller</param>
+      <param name="ID">110</param>
+      <param name="Table Sync Enable">1</param>
+    </gpio>
+
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="111" model_num="6001"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="112" model_num="6002"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="113" model_num="6003"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="114" model_num="6004"/>
+    <xacro:ffw_bg2_right_hand_virtual_sensor name="finger_r_sensor1" id="115" model_num="6005"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="116" model_num="6006"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="117" model_num="6007"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="118" model_num="6008"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="119" model_num="6009"/>
+    <xacro:ffw_bg2_right_hand_virtual_sensor name="finger_r_sensor2" id="120" model_num="6010"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="121" model_num="6011"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="122" model_num="6012"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="123" model_num="6013"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="124" model_num="6014"/>
+    <xacro:ffw_bg2_right_hand_virtual_sensor name="finger_r_sensor3" id="125" model_num="6015"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="126" model_num="6016"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="127" model_num="6017"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="128" model_num="6018"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="129" model_num="6019"/>
+    <xacro:ffw_bg2_right_hand_virtual_sensor name="finger_r_sensor4" id="130" model_num="6020"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="131" model_num="6021"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="132" model_num="6022"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="133" model_num="6023"/>
+    <xacro:ffw_bg2_right_hand_virtual_dxl id="134" model_num="6024"/>
+    <xacro:ffw_bg2_right_hand_virtual_sensor name="finger_r_sensor5" id="135" model_num="6025"/>
+  </xacro:macro>
+
   <xacro:macro name="ffw_bg2_follower_system" params="use_sim:=^|false use_mock_hardware:=^|false mock_sensor_commands:=^|false">
     <ros2_control name="ffw_bg2_follower" type="system" is_async="true">
       <xacro:if value="$(arg use_sim)">
@@ -19,8 +321,8 @@
             <param name="port_name">/dev/follower</param>
             <param name="baud_rate">4000000</param>
             <param name="dynamixel_model_folder">/param/dxl_model</param>
-            <param name="number_of_joints">17</param>
-            <param name="number_of_transmissions">17</param>
+            <param name="number_of_joints">38</param>
+            <param name="number_of_transmissions">38</param>
             <param name="disable_torque_at_init">true</param>
             <param name="dynamixel_state_pub_msg_name">dynamixel_hardware_interface/dxl_state</param>
             <param name="get_dynamixel_data_srv_name">dynamixel_hardware_interface/get_dxl_data</param>
@@ -114,6 +416,12 @@
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
       </joint>
+      <joint name="gripper_l_joint1">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
       <joint name="lift_joint">
         <command_interface name="position"/>
         <state_interface name="position"/>
@@ -132,6 +440,7 @@
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
       </joint>
+      <xacro:ffw_bg2_right_hand_interfaces/>
 
       <!-- RIGHT ARM -->
       <gpio name="dxl1">
@@ -461,6 +770,19 @@
         <param name="Max Position Limit">131875</param>
         <param name="Min Position Limit">-151875</param>
       </gpio>
+      <gpio name="dxl38">
+        <param name="type">dxl</param>
+        <param name="ID">38</param>
+        <command_interface name="Goal Position"/>
+        <state_interface name="Present Position"/>
+        <state_interface name="Present Velocity"/>
+        <state_interface name="Present Current"/>
+        <state_interface name="Hardware Error Status"/>
+        <param name="Operating Mode">5</param>
+        <param name="Return Delay Time">0</param>
+        <param name="Profile Velocity">0</param>
+        <param name="Profile Acceleration">0</param>
+      </gpio>
       <!-- LIFT -->
       <gpio name="dxl81">
         <param name="type">dxl</param>
@@ -534,6 +856,8 @@
         <param name="Feedforward 1st Gain">30</param>
         <param name="Feedforward 2nd Gain">30</param>
       </gpio>
+      <!-- RIGHT HAND -->
+      <xacro:ffw_bg2_right_hand_hardware/>
     </ros2_control>
   </xacro:macro>
 </robot>
