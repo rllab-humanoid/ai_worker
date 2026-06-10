@@ -98,13 +98,18 @@
         - finger_r_joint18
         - finger_r_joint19
         - finger_r_joint20
-      step_names: [open]
+      step_names: [close, open]
+      close: [0.11, 0.04, 0.72, 0.72,
+              0.0, 1.57, 1.57, 1.57,
+              0.0, 1.57, 1.57, 1.57,
+              0.0, 1.57, 1.57, 1.57,
+              0.0, 1.57, 1.57, 1.57]
       open: [0.0, 0.0, 0.0, 0.0,
              0.0, 0.0, 0.0, 0.0,
              0.0, 0.0, 0.0, 0.0,
              0.0, 0.0, 0.0, 0.0,
              0.0, 0.0, 0.0, 0.0]
-      duration: 5.0
+      duration: 3.0
       position_tolerance: 0.2
       velocity_tolerance: 0.2
       action_topic: '/hand_r_controller/follow_joint_trajectory'
