@@ -332,6 +332,10 @@
           </xacro:unless>
         </hardware>
       </xacro:unless>
+      <xacro:if value="${enable_right_hand_control}">
+        <xacro:ffw_bg2_right_hand_interfaces/>
+      </xacro:if>
+
       <joint name="arm_r_joint1">
         <command_interface name="position"/>
         <state_interface name="position"/>
@@ -441,7 +445,8 @@
         <state_interface name="effort"/>
       </joint>
       <xacro:if value="${enable_right_hand_control}">
-        <xacro:ffw_bg2_right_hand_interfaces/>
+        <!-- RIGHT HAND -->
+        <xacro:ffw_bg2_right_hand_hardware/>
       </xacro:if>
 
       <!-- RIGHT ARM -->
@@ -858,10 +863,6 @@
         <param name="Feedforward 1st Gain">30</param>
         <param name="Feedforward 2nd Gain">30</param>
       </gpio>
-      <xacro:if value="${enable_right_hand_control}">
-        <!-- RIGHT HAND -->
-        <xacro:ffw_bg2_right_hand_hardware/>
-      </xacro:if>
     </ros2_control>
   </xacro:macro>
 </robot>
