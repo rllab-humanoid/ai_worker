@@ -198,14 +198,6 @@ def generate_launch_description():
         condition=IfCondition(enable_right_hand_control),
     )
 
-    delay_right_hand_current_command_process_after_controllers = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=right_hand_controller_spawner,
-            on_exit=[right_hand_current_command_process],
-        ),
-        condition=IfCondition(enable_right_hand_control),
-    )
-
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
@@ -254,6 +246,17 @@ def generate_launch_description():
         name='hand_r_joint_trajectory_executor',
         parameters=[trajectory_params_file],
         output='screen',
+        condition=IfCondition(init_position),
+    )
+
+    delay_right_hand_processes_after_controllers = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=right_hand_controller_spawner,
+            on_exit=[
+                right_hand_current_command_process,
+                TimerAction(period=2.0, actions=[joint_trajectory_executor_right_hand]),
+            ],
+        ),
         condition=IfCondition(enable_right_hand_control),
     )
 
@@ -265,7 +268,6 @@ def generate_launch_description():
                 joint_trajectory_executor_right,
                 joint_trajectory_executor_head,
                 joint_trajectory_executor_lift,
-                joint_trajectory_executor_right_hand
             ]
         ),
         condition=IfCondition(init_position)
@@ -276,6 +278,14 @@ def generate_launch_description():
     camera_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(PathJoinSubstitution([bringup_launch_dir,
                                                             'camera.launch.py'])),
+        launch_arguments={
+            'colorizer.enable1': 'false',
+            'colorizer.enable2': 'false',
+            'enable_sync1': 'true',
+            'enable_sync2': 'true',
+            'align_depth.enable1': 'true',
+            'align_depth.enable2': 'true'
+        }.items(),
         condition=IfCondition(launch_cameras)
     )
 
@@ -302,7 +312,7 @@ def generate_launch_description():
             delay_rviz_after_joint_state_broadcaster_spawner,
             robot_controller_spawner,
             right_hand_controller_spawner,
-            delay_right_hand_current_command_process_after_controllers,
+            delay_right_hand_processes_after_controllers,
             init_position_event_handler,
             camera_timer_20s,
             camera_timer_10s,
