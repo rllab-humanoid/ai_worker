@@ -92,6 +92,9 @@ def launch_setup(context, *args, **kwargs):
 
     ros_params_override_path = LaunchConfiguration('ros_params_override_path')
     config_ffmpeg = LaunchConfiguration('ffmpeg_config_path')
+    compressed_image_transport_format = LaunchConfiguration('compressed_image_transport_format')
+    compressed_image_transport_jpeg_quality = LaunchConfiguration(
+        'compressed_image_transport_jpeg_quality')
 
     serial_number = LaunchConfiguration('serial_number')
     camera_id = LaunchConfiguration('camera_id')
@@ -258,7 +261,21 @@ def launch_setup(context, *args, **kwargs):
                 'pos_tracking.publish_tf': publish_tf,
                 'pos_tracking.publish_map_tf': publish_map_tf,
                 'sensors.publish_imu_tf': publish_imu_tf,
-                'gnss_fusion.gnss_fusion_enabled': enable_gnss
+                'gnss_fusion.gnss_fusion_enabled': enable_gnss,
+                'left.image_rect_color.compressed.format': compressed_image_transport_format,
+                'left.image_rect_color.compressed.jpeg_quality':
+                    compressed_image_transport_jpeg_quality,
+                'right.image_rect_color.compressed.format': compressed_image_transport_format,
+                'right.image_rect_color.compressed.jpeg_quality':
+                    compressed_image_transport_jpeg_quality,
+                'zed_node.left.image_rect_color.compressed.format':
+                    compressed_image_transport_format,
+                'zed_node.left.image_rect_color.compressed.jpeg_quality':
+                    compressed_image_transport_jpeg_quality,
+                'zed_node.right.image_rect_color.compressed.format':
+                    compressed_image_transport_format,
+                'zed_node.right.image_rect_color.compressed.jpeg_quality':
+                    compressed_image_transport_jpeg_quality
             }
     )
 
@@ -341,6 +358,15 @@ def generate_launch_description():
                 default_value=TextSubstitution(text=default_config_ffmpeg),
                 description='Path to the YAML configuration file for the FFMPEG parameters '
                             'when using FFMPEG image transport plugin.'),
+            DeclareLaunchArgument(
+                'compressed_image_transport_format',
+                default_value='jpeg',
+                description='Compression format used by compressed_image_transport.',
+                choices=['jpeg', 'png', 'tiff']),
+            DeclareLaunchArgument(
+                'compressed_image_transport_jpeg_quality',
+                default_value='95',
+                description='JPEG quality used by compressed_image_transport. Valid range: 1-100.'),
             DeclareLaunchArgument(
                 'serial_number',
                 default_value='0',
